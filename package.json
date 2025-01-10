@@ -1,0 +1,1012 @@
+{
+	"name": "vscode-gradle",
+	"displayName": "Gradle for Java",
+	"description": "Manage Gradle Projects, run Gradle tasks and provide better Gradle file authoring experience in VS Code",
+	"version": "3.16.4",
+	"private": true,
+	"publisher": "vscjava",
+	"aiKey": "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255",
+	"icon": "resources/icon.png",
+	"readme": "README.md",
+	"bugs": {
+		"url": "https://github.com/microsoft/vscode-gradle/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/microsoft/vscode-gradle/"
+	},
+	"license": "SEE LICENSE IN LICENSE.md",
+	"engines": {
+		"vscode": "^1.76.0",
+		"node": "^18.20.4",
+		"npm": "^10.7.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Other"
+	],
+	"keywords": [
+		"java",
+		"gradle",
+		"compile",
+		"build",
+		"tasks"
+	],
+	"activationEvents": [
+		"workspaceContains:**/gradlew",
+		"workspaceContains:**/gradlew.bat",
+		"workspaceContains:build.gradle",
+		"workspaceContains:*/build.gradle",
+		"workspaceContains:settings.gradle",
+		"workspaceContains:*/settings.gradle",
+		"workspaceContains:build.gradle.kts",
+		"workspaceContains:*/build.gradle.kts",
+		"workspaceContains:settings.gradle.kts",
+		"workspaceContains:*/settings.gradle.kts",
+		"onCommand:_gradle.onWillImporterConnect"
+	],
+	"main": "./dist/index.js",
+	"contributes": {
+		"javaExtensions": [
+			"./server/com.microsoft.gradle.bs.importer-0.5.3.jar"
+		],
+		"languages": [
+			{
+				"id": "gradle",
+				"extensions": [
+					".gradle"
+				],
+				"aliases": [
+					"Gradle"
+				],
+				"configuration": "./gradle-language-configuration.json"
+			},
+			{
+				"id": "gradle-build"
+			}
+		],
+		"grammars": [
+			{
+				"language": "gradle",
+				"scopeName": "source.groovy",
+				"path": "./syntaxes/groovy.tmLanguage.json"
+			},
+			{
+				"language": "gradle-build",
+				"scopeName": "source.gradle-build",
+				"path": "./syntaxes/GradleBuild.tmLanguage.json"
+			}
+		],
+		"problemMatchers": [
+			{
+				"owner": "gradle",
+				"name": "gradle",
+				"fileLocation": [
+					"relative",
+					"${workspaceFolder}"
+				],
+				"pattern": {
+					"regexp": "^.*(FAILURE):\\s*(.*)$",
+					"severity": 1,
+					"message": 2
+				}
+			}
+		],
+		"views": {
+			"gradleContainerView": [
+				{
+					"id": "gradleTasksView",
+					"name": "Gradle Projects",
+					"when": "gradle:activated && !gradle:defaultView"
+				},
+				{
+					"id": "gradleDefaultProjectsView",
+					"name": "Gradle Projects",
+					"when": "gradle:activated && gradle:defaultView"
+				},
+				{
+					"id": "recentTasksView",
+					"name": "Recent Tasks",
+					"when": "gradle:activated",
+					"visibility": "collapsed"
+				},
+				{
+					"id": "gradleDaemonsView",
+					"name": "Gradle Daemons",
+					"when": "gradle:activated",
+					"visibility": "collapsed"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "gradleContainerView",
+					"title": "Gradle",
+					"icon": "resources/icon-transparency.png"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "gradle.runTask",
+				"title": "Run Task",
+				"icon": {
+					"light": "resources/light/run.svg",
+					"dark": "resources/dark/run.svg"
+				}
+			},
+			{
+				"command": "gradle.runBuild",
+				"category": "Gradle",
+				"title": "Run a Gradle Build",
+				"icon": {
+					"light": "resources/light/console.svg",
+					"dark": "resources/dark/console.svg"
+				}
+			},
+			{
+				"command": "gradle.pinTask",
+				"title": "Pin Task"
+			},
+			{
+				"command": "gradle.pinTaskWithArgs",
+				"title": "Pin Task With Args"
+			},
+			{
+				"command": "gradle.unpinTask",
+				"title": "Unpin Task"
+			},
+			{
+				"command": "gradle.debugTask",
+				"title": "Debug Task",
+				"icon": {
+					"light": "resources/light/debug-and-run.svg",
+					"dark": "resources/dark/debug-and-run.svg"
+				}
+			},
+			{
+				"command": "gradle.restartTask",
+				"title": "Restart Task",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "gradle.showTaskTerminal",
+				"title": "Show Terminal",
+				"icon": {
+					"light": "resources/light/console.svg",
+					"dark": "resources/dark/console.svg"
+				}
+			},
+			{
+				"command": "gradle.closeTaskTerminals",
+				"title": "Close Terminal/s",
+				"icon": {
+					"light": "resources/light/close-all.svg",
+					"dark": "resources/dark/close-all.svg"
+				}
+			},
+			{
+				"command": "gradle.closeAllTaskTerminals",
+				"title": "Close All Terminals",
+				"icon": {
+					"light": "resources/light/close-all.svg",
+					"dark": "resources/dark/close-all.svg"
+				}
+			},
+			{
+				"command": "gradle.clearAllRecentTasks",
+				"title": "Clear Recent Tasks",
+				"icon": {
+					"light": "resources/light/clear-all.svg",
+					"dark": "resources/dark/clear-all.svg"
+				}
+			},
+			{
+				"command": "gradle.unpinAllTasks",
+				"title": "Unpin all Tasks",
+				"icon": {
+					"light": "resources/light/clear-all.svg",
+					"dark": "resources/dark/clear-all.svg"
+				}
+			},
+			{
+				"command": "gradle.removeRecentTask",
+				"title": "Remove Recent Task"
+			},
+			{
+				"command": "gradle.showLogs",
+				"title": "Show logs"
+			},
+			{
+				"command": "gradle.showTasks",
+				"title": "Show Gradle Tasks"
+			},
+			{
+				"command": "gradle.runTaskWithArgs",
+				"title": "Run Task With Args"
+			},
+			{
+				"command": "gradle.debugTaskWithArgs",
+				"title": "Debug Task With Args"
+			},
+			{
+				"command": "gradle.openBuildFile",
+				"title": "Open Build File"
+			},
+			{
+				"command": "gradle.cancelBuild",
+				"title": "Cancel Task"
+			},
+			{
+				"command": "gradle.stopDaemon",
+				"title": "Stop Daemon",
+				"icon": {
+					"light": "resources/light/stop.svg",
+					"dark": "resources/dark/stop.svg"
+				}
+			},
+			{
+				"command": "gradle.cancelTreeItemTask",
+				"title": "Cancel Task",
+				"icon": {
+					"light": "resources/light/stop.svg",
+					"dark": "resources/dark/stop.svg"
+				}
+			},
+			{
+				"command": "gradle.explorerFlat",
+				"title": "Show Flat Tasks",
+				"icon": {
+					"light": "resources/light/list-flat.svg",
+					"dark": "resources/dark/list-flat.svg"
+				}
+			},
+			{
+				"command": "gradle.explorerTree",
+				"title": "Show Hierarchical Tasks",
+				"icon": {
+					"light": "resources/light/list-tree.svg",
+					"dark": "resources/dark/list-tree.svg"
+				}
+			},
+			{
+				"command": "gradle.showProcessMessage",
+				"title": "Show Gradle process information message box"
+			},
+			{
+				"command": "gradle.refresh",
+				"category": "Gradle",
+				"title": "Refresh Gradle Projects View",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "gradle.refreshDaemonStatus",
+				"title": "Refresh Daemon Status",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "gradle.stopDaemons",
+				"enablement": "gradle:hasValidDaemons",
+				"title": "Stop Daemons",
+				"icon": {
+					"light": "resources/light/stop-daemons.svg",
+					"dark": "resources/dark/stop-daemons.svg"
+				}
+			},
+			{
+				"command": "gradle.openSettings",
+				"title": "Open Settings",
+				"icon": {
+					"light": "resources/light/gear.svg",
+					"dark": "resources/dark/gear.svg"
+				}
+			},
+			{
+				"command": "gradle.findTask",
+				"category": "Gradle",
+				"title": "Find Gradle Task"
+			},
+			{
+				"command": "gradle.cancellingTreeItemTask",
+				"title": "Cancelling Task",
+				"icon": {
+					"light": "resources/light/loading.svg",
+					"dark": "resources/dark/loading.svg"
+				}
+			},
+			{
+				"command": "gradle.dependency.reveal",
+				"title": "Go to Dependency",
+				"icon": "$(references)"
+			},
+			{
+				"command": "gradle.showStoppedDaemons",
+				"title": "Show Stopped Daemons"
+			},
+			{
+				"command": "gradle.hideStoppedDaemons",
+				"title": "Hide Stopped Daemons"
+			},
+			{
+				"command": "gradle.createProject",
+				"category": "Gradle",
+				"title": "Create a Gradle Java Project..."
+			},
+			{
+				"command": "gradle.createProjectAdvanced",
+				"category": "Gradle",
+				"title": "Create a Gradle Java Project... (Advanced)"
+			},
+			{
+				"command": "gradle.runTasks",
+				"category": "Gradle",
+				"title": "Run Gradle Tasks..."
+			},
+			{
+				"command": "gradle.java.projectConfiguration.update",
+				"category": "Gradle",
+				"title": "Reload All Gradle Projects",
+				"icon": "$(sync)"
+			}
+		],
+		"submenus": [
+			{
+				"id": "explorer/gradle",
+				"label": "Gradle"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "gradle.showTasks",
+					"when": "false"
+				},
+				{
+					"command": "gradle.runTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.showLogs",
+					"when": "false"
+				},
+				{
+					"command": "gradle.debugTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.restartTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.showTaskTerminal",
+					"when": "false"
+				},
+				{
+					"command": "gradle.closeTaskTerminals",
+					"when": "false"
+				},
+				{
+					"command": "gradle.closeAllTaskTerminals",
+					"when": "false"
+				},
+				{
+					"command": "gradle.clearAllRecentTasks",
+					"when": "false"
+				},
+				{
+					"command": "gradle.unpinAllTasks",
+					"when": "false"
+				},
+				{
+					"command": "gradle.refreshDaemonStatus",
+					"when": "false"
+				},
+				{
+					"command": "gradle.stopDaemons",
+					"when": "false"
+				},
+				{
+					"command": "gradle.openBuildFile",
+					"when": "false"
+				},
+				{
+					"command": "gradle.runTaskWithArgs",
+					"when": "false"
+				},
+				{
+					"command": "gradle.debugTaskWithArgs",
+					"when": "false"
+				},
+				{
+					"command": "gradle.cancelBuild",
+					"when": "false"
+				},
+				{
+					"command": "gradle.stopDaemon",
+					"when": "false"
+				},
+				{
+					"command": "gradle.cancelTreeItemTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.explorerFlat",
+					"when": "false"
+				},
+				{
+					"command": "gradle.explorerTree",
+					"when": "false"
+				},
+				{
+					"command": "gradle.showProcessMessage",
+					"when": "false"
+				},
+				{
+					"command": "gradle.openSettings",
+					"when": "false"
+				},
+				{
+					"command": "gradle.cancellingTreeItemTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.pinTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.pinTaskWithArgs",
+					"when": "false"
+				},
+				{
+					"command": "gradle.removeRecentTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.dependency.reveal",
+					"when": "false"
+				},
+				{
+					"command": "gradle.showStoppedDaemons",
+					"when": "false"
+				},
+				{
+					"command": "gradle.hideStoppedDaemons",
+					"when": "false"
+				},
+				{
+					"command": "gradle.unpinTask",
+					"when": "false"
+				},
+				{
+					"command": "gradle.refresh",
+					"when": "gradle:extensionActivated"
+				},
+				{
+					"command": "gradle.runBuild",
+					"when": "gradle:extensionActivated"
+				},
+				{
+					"command": "gradle.findTask",
+					"when": "gradle:extensionActivated"
+				},
+				{
+					"command": "gradle.createProject",
+					"when": "!java:projectManagerActivated"
+				},
+				{
+					"command": "gradle.runTasks",
+					"when": "false"
+				},
+				{
+					"command": "gradle.java.projectConfiguration.update",
+					"when": "false"
+				}
+			],
+			"view/title": [
+				{
+					"command": "gradle.unpinAllTasks",
+					"when": "view == gradleTasksView",
+					"group": "overflow_0@0"
+				},
+				{
+					"command": "gradle.openSettings",
+					"when": "view == gradleTasksView || view == gradleDefaultProjectsView"
+				},
+				{
+					"command": "gradle.findTask",
+					"when": "view == gradleTasksView"
+				},
+				{
+					"command": "gradle.runBuild",
+					"when": "view == gradleTasksView || view == gradleDefaultProjectsView",
+					"group": "navigation@0"
+				},
+				{
+					"command": "gradle.explorerFlat",
+					"when": "view == gradleTasksView && !gradle:gradleTasksCollapsed",
+					"group": "navigation@1"
+				},
+				{
+					"command": "gradle.explorerTree",
+					"when": "view == gradleTasksView && gradle:gradleTasksCollapsed",
+					"group": "navigation@2"
+				},
+				{
+					"command": "gradle.refresh",
+					"when": "view == gradleTasksView || view == gradleDefaultProjectsView",
+					"group": "overflow@3"
+				},
+				{
+					"command": "gradle.java.projectConfiguration.update",
+					"when": "view == gradleTasksView && javaLSReady",
+					"group": "navigation@3"
+				},
+				{
+					"command": "gradle.stopDaemons",
+					"when": "view == gradleDaemonsView",
+					"group": "navigation@1"
+				},
+				{
+					"command": "gradle.refreshDaemonStatus",
+					"when": "view == gradleDaemonsView",
+					"group": "navigation@2"
+				},
+				{
+					"command": "gradle.showStoppedDaemons",
+					"when": "view == gradleDaemonsView && config.gradle.showStoppedDaemons == false",
+					"group": "overflow_0@0"
+				},
+				{
+					"command": "gradle.hideStoppedDaemons",
+					"when": "view == gradleDaemonsView && config.gradle.showStoppedDaemons == true",
+					"group": "overflow_0@0"
+				},
+				{
+					"command": "gradle.clearAllRecentTasks",
+					"when": "view == recentTasksView",
+					"group": "navigation@0"
+				},
+				{
+					"command": "gradle.closeAllTaskTerminals",
+					"when": "view == recentTasksView",
+					"group": "navigation@1"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "gradle.runTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$|^gradleDefaultProjectsView$/ && viewItem =~ /^(pinned)?debugTask.*$|^(pinned)?task.*$/",
+					"group": "contextGroup1@0"
+				},
+				{
+					"command": "gradle.runTaskWithArgs",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$|^gradleDefaultProjectsView$/ && viewItem =~ /^(pinned)?debugTask(WithTerminals)?$|^(pinned)?task(WithTerminals)?$/",
+					"group": "contextGroup1@1"
+				},
+				{
+					"command": "gradle.debugTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^(pinned)?debugTask.*$/",
+					"group": "contextGroup2@0"
+				},
+				{
+					"command": "gradle.debugTaskWithArgs",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^(pinned)?debugTask(WithTerminals)?$/",
+					"group": "contextGroup2@1"
+				},
+				{
+					"command": "gradle.showTaskTerminal",
+					"when": "view == recentTasksView && viewItem =~ /^(pinned)?debugTask(WithArgs)?WithTerminals.*$|^(pinned)?task(WithArgs)?WithTerminals.*$|^(pinned)?runningTask(WithArgs)?WithTerminals.*$|^(pinned)?runningDebugTask(WithArgs)?WithTerminals.*$/",
+					"group": "inline@0"
+				},
+				{
+					"command": "gradle.closeTaskTerminals",
+					"when": "view == recentTasksView  && viewItem =~ /^(pinned)?debugTask(WithArgs)?WithTerminals.*$|^(pinned)?task(WithArgs)?WithTerminals.*$|^(pinned)?runningTask(WithArgs)?WithTerminals.*$|^(pinned)?runningDebugTask(WithArgs)?WithTerminals.*$/",
+					"group": "inline@1"
+				},
+				{
+					"command": "gradle.debugTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^(pinned)?debugTask.*$/ || viewItem =~ /^(pinned)?runningDebugTask.*$/ && allowParallelRun == true",
+					"group": "inline@2"
+				},
+				{
+					"command": "gradle.runTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$|^gradleDefaultProjectsView$/ && viewItem =~ /^(pinned)?debugTask.*$|^(pinned)?task.*$/ || viewItem =~ /^(pinned)?runningTask.*$|^(pinned)?runningDebugTask.*$/ && allowParallelRun == true",
+					"group": "inline@3"
+				},
+				{
+					"command": "gradle.restartTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^(pinned)?runningTask.*$|^(pinned)?runningDebugTask.*$/ && !allowParallelRun",
+					"group": "inline@4"
+				},
+				{
+					"command": "gradle.cancelTreeItemTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^(pinned)?runningTask.*$|^(pinned)?runningDebugTask.*$/ && !allowParallelRun",
+					"group": "inline@5"
+				},
+				{
+					"command": "gradle.cancellingTreeItemTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^cancellingTask.*$/",
+					"group": "inline@6"
+				},
+				{
+					"command": "gradle.pinTask",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^debugTask(WithTerminals)?.*$|^task(WithTerminals)?.*$/",
+					"group": "contextGroup3@0"
+				},
+				{
+					"command": "gradle.pinTaskWithArgs",
+					"when": "view =~ /^gradleTasksView$|^recentTasksView$/ && viewItem =~ /^(pinned)?debugTask(WithTerminals)?$|^(pinned)?task(WithTerminals)?$/",
+					"group": "contextGroup3@1"
+				},
+				{
+					"command": "gradle.unpinTask",
+					"when": "view == gradleTasksView && viewItem =~ /^pinned.*$/",
+					"group": "contextGroup3@2"
+				},
+				{
+					"command": "gradle.unpinAllTasks",
+					"when": "view == gradleTasksView && viewItem == PinnedTasks",
+					"group": "contextGroup3@3"
+				},
+				{
+					"command": "gradle.removeRecentTask",
+					"when": "view == recentTasksView && viewItem =~ /^debugTask.*$|^task.*$/",
+					"group": "contextGroup4@0"
+				},
+				{
+					"command": "gradle.stopDaemon",
+					"when": "view == gradleDaemonsView && viewItem =~ /^busy$|^idle$/",
+					"group": "inline@0"
+				},
+				{
+					"command": "gradle.dependency.reveal",
+					"when": "view == gradleTasksView && viewItem == omitted",
+					"group": "inline@0"
+				},
+				{
+					"command": "gradle.stopDaemon",
+					"when": "view == gradleDaemonsView && viewItem =~ /^busy$|^idle$/",
+					"group": "contextGroup1@0"
+				},
+				{
+					"command": "gradle.openBuildFile",
+					"when": "view =~ /^gradleTasksView$$|^recentTasksView$/ && viewItem =~ /^(pinned)?debugTask.*$|^(pinned)?task.*$/",
+					"group": "contextGroup5@0"
+				}
+			],
+			"explorer/context": [
+				{
+					"submenu": "explorer/gradle",
+					"when": "resourceFilename =~ /^.*\\.gradle(\\.kts)?$/",
+					"group": "1_javaactions@200"
+				}
+			],
+			"editor/context": [
+				{
+					"when": "resourceFilename =~ /^((?!settings).)*\\.gradle(\\.kts)?$/",
+					"command": "gradle.showTasks",
+					"group": "gradle@0"
+				}
+			],
+			"javaProject.gradle": [
+				{
+					"command": "gradle.runTasks",
+					"group": "gradle@20"
+				},
+				{
+					"command": "gradle.openBuildFile",
+					"group": "gradle@30"
+				}
+			],
+			"explorer/gradle": [
+				{
+					"when": "resourceFilename =~ /^((?!settings).)*\\.gradle(\\.kts)?$/",
+					"command": "gradle.showTasks",
+					"group": "gradle@10"
+				}
+			]
+		},
+		"configuration": {
+			"id": "gradle",
+			"type": "object",
+			"title": "Gradle",
+			"properties": {
+				"gradle.autoDetect": {
+					"type": "string",
+					"enum": [
+						"off",
+						"on"
+					],
+					"default": "on",
+					"scope": "resource",
+					"description": "Controls whether Gradle tasks should be automatically detected"
+				},
+				"gradle.nestedProjects": {
+					"anyOf": [
+						{
+							"type": "boolean",
+							"description": "Discover all nested projects",
+							"default": false
+						},
+						{
+							"type": "array",
+							"description": "Discover specific nested projects (by directory name)",
+							"default": []
+						}
+					],
+					"scope": "window",
+					"default": false,
+					"description": "Discover Gradle projects in nested sub-directories"
+				},
+				"gradle.reuseTerminals": {
+					"enum": [
+						"task",
+						"off",
+						"all"
+					],
+					"enumDescriptions": [
+						"Use a dedicated terminal for a specific task. The terminal is not shared with other tasks.",
+						"Create a new terminal when a task is executed.",
+						"Share the terminal with other tasks."
+					],
+					"default": "task",
+					"scope": "window",
+					"markdownDescription": "Reuse task terminals behaviour, will be overridden to `off` if `gradle.allowParallelRun` is true."
+				},
+				"gradle.debug": {
+					"type": "boolean",
+					"default": false,
+					"scope": "window",
+					"description": "Show extra debug information in the output panel"
+				},
+				"gradle.disableConfirmations": {
+					"type": "boolean",
+					"default": false,
+					"scope": "window",
+					"description": "Disable the warning confirm messages when performing batch actions"
+				},
+				"gradle.focusTaskInExplorer": {
+					"type": "boolean",
+					"default": true,
+					"scope": "window",
+					"description": "Focus the task in the explorer when running a task"
+				},
+				"gradle.javaDebug.cleanOutput": {
+					"type": "boolean",
+					"default": true,
+					"scope": "window",
+					"description": "Clean the task output cache before debugging"
+				},
+				"gradle.javaDebug": {
+					"type": "object",
+					"description": "Java debug options",
+					"deprecationMessage": "This setting will be removed in the future since the extension can automatically get debug tasks, for clean options, please see `gradle.javaDebug.cleanOutput`.",
+					"scope": "resource",
+					"properties": {
+						"tasks": {
+							"type": "array",
+							"default": [
+								"run",
+								"runBoot",
+								"test",
+								"intTest",
+								"integration"
+							],
+							"description": "List of JavaExec tasks to debug"
+						},
+						"clean": {
+							"type": "boolean",
+							"default": true,
+							"description": "Clean the task output cache before debugging"
+						}
+					},
+					"required": [
+						"tasks"
+					],
+					"default": {
+						"tasks": [
+							"run",
+							"runBoot",
+							"test",
+							"intTest",
+							"integration"
+						]
+					}
+				},
+				"gradle.showStoppedDaemons": {
+					"type": "boolean",
+					"default": false,
+					"scope": "application",
+					"description": "Show stopped daemons in the Gradle Daemons view"
+				},
+				"gradle.allowParallelRun": {
+					"type": "boolean",
+					"default": false,
+					"scope": "window",
+					"markdownDescription": "Allow to run tasks in parallel, each running will create a new terminal. This configuration will override `gradle.reuseTerminals` and always create new task terminals when running or debugging a task."
+				},
+				"gradle.projectOpenBehaviour": {
+					"default": "Interactive",
+					"type": "string",
+					"scope": "window",
+					"description": "Default method of opening newly created project.",
+					"enum": [
+						"Interactive",
+						"Open",
+						"Add to Workspace"
+					]
+				},
+				"java.gradle.buildServer.enabled": {
+					"type": "string",
+					"enum": [
+						"on",
+						"off"
+					],
+					"markdownDescription": "Whether to use build server to synchronize Gradle project. It will replace the original Buildship to import the Gradle when enabled.",
+					"default": "on"
+				},
+				"java.gradle.buildServer.openBuildOutput": {
+					"type": "string",
+					"enum": [
+						"neverOpen",
+						"openOnBuildStart",
+						"openOnBuildFailure"
+					],
+					"enumDescriptions": [
+						"Never automatically open build output.",
+						"Open the build output when the build starts.",
+						"Open the build output when the build fails."
+					],
+					"default": "openOnBuildFailure",
+					"description": "Controls when the build output should open."
+				}
+			}
+		},
+		"jsonValidation": [
+			{
+				"fileMatch": "package.json",
+				"url": "https://schemastore.azurewebsites.net/schemas/json/package.json"
+			}
+		],
+		"taskDefinitions": [
+			{
+				"type": "gradle",
+				"required": [
+					"id",
+					"script",
+					"description",
+					"group",
+					"project",
+					"buildFile",
+					"rootProject",
+					"projectFolder",
+					"workspaceFolder",
+					"args",
+					"javaDebug"
+				],
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Unique identifier for this task"
+					},
+					"script": {
+						"type": "string",
+						"description": "The task script name"
+					},
+					"description": {
+						"type": "string",
+						"description": "Description of the task"
+					},
+					"group": {
+						"type": "string",
+						"description": "Task group"
+					},
+					"project": {
+						"type": "string",
+						"description": "The project this task belongs to"
+					},
+					"buildFile": {
+						"type": "string",
+						"description": "The full path to task project build file"
+					},
+					"rootProject": {
+						"type": "string",
+						"description": "The root project this task belongs to"
+					},
+					"projectFolder": {
+						"type": "string",
+						"description": "The gradle project folder path"
+					},
+					"workspaceFolder": {
+						"type": "string",
+						"description": "The workspace folder path"
+					},
+					"args": {
+						"type": "string",
+						"description": "Task args"
+					},
+					"javaDebug": {
+						"type": "boolean",
+						"description": "Debug JavaExec task when executing"
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"test": "node ./out/test/runTests.js",
+		"lint": "npm run lint:prettier && npm run lint:eslint",
+		"lint:prettier": "prettier --check \"**/*.{ts,js,json,svg,md,yml}\"",
+		"lint:eslint": "eslint . --ext .js,.ts",
+		"lint:fix": "npm run lint:fix:prettier && npm run lint:eslint -- --fix",
+		"lint:fix:prettier": "prettier --write \"**/*.{ts,js,json,svg,md,yml}\"",
+		"compile": "tsc -p . && webpack --config webpack.config.js --mode production",
+		"compile:test": "tsc -p .",
+		"preinstall:ext": "vsce package",
+		"update-tpn": "node scripts/update-third-party-notice.js"
+	},
+	"devDependencies": {
+		"@grpc/grpc-js": "^1.8.22",
+		"@types/fs-extra": "^11.0.1",
+		"@types/glob": "^8.1.0",
+		"@types/google-protobuf": "^3.15.6",
+		"@types/lodash": "^4.14.191",
+		"@types/mocha": "^10.0.1",
+		"@types/node": "^16.11.7",
+		"@types/sinon": "^10.0.13",
+		"@types/vscode": "^1.76.0",
+		"@typescript-eslint/eslint-plugin": "^5.54.0",
+		"@typescript-eslint/parser": "^5.54.0",
+		"@vscode/test-electron": "^2.3.8",
+		"@vscode/vsce": "^2.18.0",
+		"eslint": "^8.35.0",
+		"eslint-config-prettier": "^8.6.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"google-protobuf": "^3.21.2",
+		"grpc-tools": "^1.12.4",
+		"mocha": "^10.2.0",
+		"prettier": "^2.8.4",
+		"sinon": "^15.0.1",
+		"ts-loader": "^9.4.2",
+		"ts-protoc-gen": "^0.15.0",
+		"typescript": "^4.9.5",
+		"webpack": "^5.76.0",
+		"webpack-cli": "^5.0.1"
+	},
+	"dependencies": {
+		"await-lock": "^2.2.2",
+		"jdk-utils": "^0.4.4",
+		"fs-extra": "^11.1.0",
+		"get-port": "^5.1.1",
+		"lodash": "^4.17.21",
+		"minimatch": "^5.1.1",
+		"string-argv": "^0.3.1",
+		"tree-kill": "^1.2.2",
+		"vscode-extension-telemetry-wrapper": "0.14.0",
+		"vscode-languageclient": "7.0.0"
+	},
+	"__metadata": {
+		"id": "a226f06e-9b5e-493b-b92a-553d3572f969",
+		"publisherId": "bae08b87-578e-41ec-ab1c-0b036e7add88",
+		"publisherDisplayName": "Microsoft",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1734486515825,
+		"pinned": false,
+		"preRelease": false,
+		"source": "gallery",
+		"size": 47741498
+	}
+}
