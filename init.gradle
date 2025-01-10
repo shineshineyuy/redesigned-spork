@@ -1,0 +1,10 @@
+
+      initscript {
+        dependencies {
+          classpath files('plugin.jar')
+        }
+      }
+      allprojects {
+        apply plugin: com.microsoft.java.bs.gradle.plugin.GradleBuildServerPlugin
+      }
+      
